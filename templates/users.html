@@ -1,0 +1,35 @@
+$def with (users, problems, user_submissions, user_score, time, test_counts)
+<h1>Users</h1>
+
+<ul>
+$for user in users:
+  <li>$(user.name or "No Name")
+      $if user.email:
+        (<a href="mailto:$user.email">email</a> <a
+      $else:
+        (<a
+      href="$user.openid_url">openid</a>)
+      has passed $user_score[user.id] tests. <br/>
+    <ul>
+    $for problem in problems:
+      $if user_submissions.has_key((user.id, problem.id)):
+        $code:
+          tests_passed = max((s.tests_passed
+              for s in user_submissions[(user.id, problem.id)]))
+        <li>$problem.name: $(len(user_submissions[(user.id, problem.id)]))
+            submissions, best score was
+            $(tests_passed)/$(test_counts[problem.id]).
+            <ul>
+            $for submission in user_submissions[(user.id, problem.id)]:
+              <li>$submission.language.capitalize():
+                passed $(submission.tests_passed)/$(test_counts[problem.id]) on
+                $(time.ctime(submission.created_at)) in
+                $("%0.2f" % submission.runtime) seconds.
+                <a href="/submissions/$submission.id">code</a>
+                $if submission.errors:
+                  <br/>Errors: $submission.errors
+              </li>
+            </ul></lu>
+    </ul>
+  </li>
+</ul>

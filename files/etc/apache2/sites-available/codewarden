@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+	ServerAdmin jt@instructure.com
+
+	DocumentRoot /var/webapps/codewarden/static
+	Alias /static/ /var/webapps/codewarden/static/
+	<Directory /var/webapps/codewarden/static>
+		Order allow,deny
+		Allow from all
+	</Directory>
+	WSGIScriptAlias / /var/webapps/codewarden/server_wsgi.py
+</VirtualHost>

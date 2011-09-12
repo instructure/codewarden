@@ -1,0 +1,36 @@
+$def with (languages)
+<h1>Help</h1>
+
+<p>This coding competition host accepts source code files and runs them in a
+  restricted environment. You should submit source code that complies with the
+  associated problem description. If your language is interpreted, we'll run
+  the interpreter for you. If your language is compiled, we'll compile and then
+  run it.</p>
+
+<p>The restricted environment is pretty restricted, both with resources and
+  with capabilities. Specifically be careful with memory usage, most system
+  calls, and runtime.</p>
+
+<p>The input data we suggest will be coming from STDIN, and you need to write
+  your output to STDOUT. Take a minute to figure out how to do this in your
+  language.</p>
+
+<p>The test cases use Unix-style line endings, so make sure your newlines end
+  with just the \n newline character.</p>
+
+<p>If you have some question, please feel free to email <a
+  href="mailto:mebipenny@instructure.com">mebipenny@instructure.com</a> to ask.
+</p>
+
+<p>The supported language versions are:</p>
+<ul>
+$for language in languages:
+  <li>$language["visible_name"] - $language["version"]</li>
+</ul>
+
+<p>Specific language notes:</p>
+<ul>
+  <li>Java/Scala - please name your main class 'Main'.</li>
+  <li>PHP - STDIN can be found at
+    <a href="http://php.net/manual/en/wrappers.php.php">php://stdin</a>.</li>
+</ul>

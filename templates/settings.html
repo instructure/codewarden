@@ -1,0 +1,32 @@
+$def with (login_form, user)
+
+$if user:
+  <h1>Settings</h1>
+  $:login_form
+
+  <p>Be sure to keep the following contact information up to date so we can contact
+  you about any possible winnings. :)</p>
+  <form method="post">
+    <dl>
+      <dt>Your name:</dt>
+        <dd><input type="text" name="name" value="$user.name"/></dd>
+      <dt>Your email:</dt>
+        <dd><input type="text" name="email" value="$user.email"/></dd>
+    </dl>
+    <input type="submit" value="Set"/>
+  </form>
+
+$else:
+  <h1>Login</h1>
+  <p>By using this service, you agree:
+  <ul>
+    <li>That Instructure employees will examine your code submissions to check
+      for fair play. Specifically, if you are attempting to solve problems by
+      guessing or something, your submission will be removed from
+      consideration.</li>
+    <li>Not to be all sore about it if you don't win.</li>
+    <li>You will consider mailing John Louviere at Utah State University some
+    Cool Whip. He's awesome and needs some.</li>
+  </ul>
+  </p>
+  $:login_form

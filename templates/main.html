@@ -1,0 +1,56 @@
+$def with (test_count, completed_count, user, body, current_tab, super_user)
+<!doctype html>
+<html>
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+    <title>Instructure Coding Competition</title>
+    <link rel="stylesheet" href="/static/common.css" type="text/css"
+          media="screen" charset="utf-8" />
+    <script type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
+    </script>
+    <script type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js">
+    </script>
+    <script type="text/javascript" src="/static/announcements.js"></script>
+  </head>
+  <body>
+    <div id="header">
+      <h1><a href="/">Instructure Coding Competition</a></h1>
+    </div>
+
+    $def sidebar_link(path, name):
+      <a href="$path"$:(current_tab == path and ' class="current"' or '')>\
+      $name</a>
+
+    $if user:
+      <div id="sidebar">
+        <nav>
+          $:sidebar_link("/", "Home")
+          $:sidebar_link("/problems", "Problems (%d/%d)" % (completed_count, test_count))
+          $:sidebar_link("/settings", "Settings")
+          $:sidebar_link("/help", "Help")
+          $if super_user:
+            $:sidebar_link("/announcements", "Announcements")
+            $:sidebar_link("/problems/new", "New Problem")
+            $:sidebar_link("/users", "Users")
+        </nav>
+      </div>
+
+    <div id="content">
+      <div id="content_bar">
+        $if user:
+          <div id="score_message">Your current score is:
+            <span class="score">$(completed_count)/$(test_count)</span></div>
+        <h4>Announcements:</h4>
+        <div id="announcements">
+        <table cellspacing=0 cellpadding=0><tr id="announcement" valign="top">
+          <td class="timestamp"></td><td class="announcement"><td></tr>
+        </table></div>
+      </div>
+
+      $:body
+    </div>
+
+  </body>
+</html>

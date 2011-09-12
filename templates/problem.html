@@ -1,0 +1,50 @@
+$def with (problem, tests, languages, tests_passed, total_attempts, flash)
+
+<script>
+$$(document).ready(function() {
+  var $$source_submission = $$("#source_submission");
+  var $$source_selection = $$("#source_submission").find("select").first();
+  $$source_submission.submit(function() {
+    if($$source_selection.val() == "") {
+      alert("Please select a source language.");
+      return false;
+    }
+    return true;
+  });
+});
+</script>
+
+<h1>$problem.name</h1>
+
+$if flash:
+  <div class="flash">$flash</div>
+
+$if tests_passed is not None and total_attempts > 0:
+  <p>$total_attempts people have attempted this problem, with an average test
+    success rate of $("%0.2f" % tests_passed)/$(len(tests)).</p>
+$else:
+  <p>This problem has not yet been attempted by anyone.</p>
+
+<pre>$problem.description</pre>
+
+$code:
+  timelimited = False
+  for test in tests:
+    if test.timelimit is not None:
+      timelimited = True
+      break
+
+$if timelimited:
+  <p>This problem has one or more test cases that have additional timelimits.
+  You may need to pay attention to performance/algorithmic complexity.</p>
+<p>There are $(len(tests)) test cases for this problem.</p>
+
+<form method="post" enctype="multipart/form-data" id="source_submission">
+<select name="language">
+<option value="">[ Please select ]</option>
+$for language in languages:
+  <option value="$language[0]">$language[1]["visible_name"]</option>
+</select><br/>
+<input type="file" name="source"/><br/>
+<input type="submit" value="Submit"/>
+</form>

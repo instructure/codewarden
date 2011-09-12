@@ -1,0 +1,16 @@
+$def with (problems, test_case_counts, completed_case_counts, super_user)
+
+<h1>Problems</h1>
+<ul>
+$for problem in problems:
+  <li style="height: 1.5em;">
+  $if super_user:
+    <form method="post" action="/problems/delete/$problem.hash"
+        style="display:inline; float:right; height: 1em;">
+      <input type="submit" value="delete"/>
+    </form>
+  <a href="/problems/show/$problem.hash">$problem.name</a>
+  (You've completed $(completed_case_counts[problem.id])/$(test_case_counts[problem.id]))</li>
+$if not problems:
+  <li>No problems!</li>
+</ul>
