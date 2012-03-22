@@ -51,6 +51,8 @@ def webapp(skip_language_checks=False):
   general_config = dict(config.items("general"))
   db = web.database(**database_config)
   oid = OpenIDWrapper(db, database_config)
+  theme = web.template.render("themes/%s/templates/" %
+      general_config.get("theme", "default"))
 
   def get_test_counts(problem_id, user_id):
     completed_cases = db.query("select max(tests_passed) as max from "
@@ -99,7 +101,7 @@ def webapp(skip_language_checks=False):
         completed_cases, test_cases = get_test_counts(problem.id, self.user_id)
         total_completed_cases += completed_cases
         total_test_cases += test_cases
-      return render.main(total_test_cases, total_completed_cases, self.user,
+      return theme.main(total_test_cases, total_completed_cases, self.user,
           body, web.ctx.path, self.super_user, general_config.get("app_title",
           "unconfigured_title"))
 
@@ -147,7 +149,7 @@ def webapp(skip_language_checks=False):
 
   class Index(BaseHandler):
     def GET(self):
-      return self.wrapper(render.index(general_config.get("app_title",
+      return self.wrapper(theme.index(general_config.get("app_title",
           "unconfigured_title")))
 
   class Redirect(BaseHandler):
@@ -321,21 +323,27 @@ def webapp(skip_language_checks=False):
       if not submissions: return web.seeother("/users")
       return self.wrapper(render.submission(submissions[0]))
 
+  safe_filename = re.compile(r'^\w(\w|\.)*$')
   class StaticFiles(object):
     def GET(self, path):
       now = timestamp()
       if not static_files_cache.has_key(path) or \
           static_files_cache[path]["expiration"] < now:
-        if path == "common.css":
-          static_files_cache[path] = {"mime": "text/css",
-                              "content": file("static/common.css").read(),
-                              "expiration": now + STATIC_FILE_EXPIRY}
-        elif path == "announcements.js":
-          static_files_cache[path] = {"mime": "text/javascript",
-                              "content": file("static/announcements.js").read(),
-                              "expiration": now + STATIC_FILE_EXPIRY}
-        else:
+
+        if not safe_filename.match(path):
           raise web.notfound()
+
+        mime_type = "application/octet-stream"
+        if path[-4:] == ".css":
+          mime_type = "text/css"
+        elif path[-3:] == ".js":
+          mime_type = "text/javascript"
+
+        static_files_cache[path] = {"mime": mime_type,
+                            "content": file("themes/%s/static/%s" %
+                            (general_config.get("theme", "default"), path)
+                            ).read(), "expiration": now + STATIC_FILE_EXPIRY}
+
       web.header('Content-Type', static_files_cache[path]["mime"])
       return static_files_cache[path]["content"]
 
@@ -352,7 +360,7 @@ def webapp(skip_language_checks=False):
       '/problems/show/([a-f0-9]+)', 'ShowProblem',
       '/users', 'Users',
       '/submissions/([0-9]+)', 'Submission',
-#      '/static/(.*)', 'StaticFiles',
+      '/theme/(.*)', 'StaticFiles',
       '/openid', 'OpenID',
       '.*', 'Redirect'
     ), locals(), autoreload=False)
