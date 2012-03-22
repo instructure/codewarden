@@ -41,6 +41,7 @@ class OpenIDWrapper(object):
 
   def _new_session(self, initial_data):
     hash = None
+    retry_count = 0
     while True:
       hash = binascii.hexlify(self._random_data())
       t = self.db.transaction()
@@ -55,6 +56,9 @@ class OpenIDWrapper(object):
         if count > 1: raise "found dup"
       except:
         t.rollback()
+        retry_count += 1
+        if retry_count >= 20:
+          raise
       else:
         t.commit()
         break
