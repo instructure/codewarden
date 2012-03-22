@@ -1,9 +1,9 @@
-$def with (test_count, completed_count, user, body, current_tab, super_user)
+$def with (test_count, completed_count, user, body, current_tab, super_user, title)
 <!doctype html>
 <html>
   <head>
     <meta name="Content-Type" content="text/html; charset=utf-8" />
-    <title>Instructure Coding Competition</title>
+    <title>$(title)</title>
     <link rel="stylesheet" href="/static/common.css" type="text/css"
           media="screen" charset="utf-8" />
     <script type="text/javascript"
@@ -16,7 +16,7 @@ $def with (test_count, completed_count, user, body, current_tab, super_user)
   </head>
   <body>
     <div id="header">
-      <h1><a href="/">Instructure Coding Competition</a></h1>
+      <h1><a href="/">$(title)</a></h1>
     </div>
 
     $def sidebar_link(path, name):

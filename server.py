@@ -48,6 +48,7 @@ def webapp(skip_language_checks=False):
   render = web.template.render("templates/")
 
   database_config = dict(config.items("database"))
+  general_config = dict(config.items("general"))
   db = web.database(**database_config)
   oid = OpenIDWrapper(db, database_config)
 
@@ -99,7 +100,8 @@ def webapp(skip_language_checks=False):
         total_completed_cases += completed_cases
         total_test_cases += test_cases
       return render.main(total_test_cases, total_completed_cases, self.user,
-          body, web.ctx.path, self.super_user)
+          body, web.ctx.path, self.super_user, general_config.get("app_title",
+          "unconfigured_title"))
 
   class Announcements(BaseHandler):
     def GET(self, is_json):
@@ -145,7 +147,8 @@ def webapp(skip_language_checks=False):
 
   class Index(BaseHandler):
     def GET(self):
-      return self.wrapper(render.index())
+      return self.wrapper(render.index(general_config.get("app_title",
+          "unconfigured_title")))
 
   class Redirect(BaseHandler):
     def GET(self):
@@ -156,7 +159,8 @@ def webapp(skip_language_checks=False):
       enabled_languages = sj_client.enabled_languages()
       languages = [enabled_languages[lang]
           for lang in sorted(enabled_languages)]
-      return self.wrapper(render.help(languages))
+      return self.wrapper(render.help(languages, general_config.get(
+          "contact_email", "unconfigured_contact_email")))
 
   class Problems(BaseHandler):
     def GET(self):
