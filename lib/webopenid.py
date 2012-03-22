@@ -102,7 +102,7 @@ class OpenIDWrapper(object):
         <strong>%s</strong>
         <input type="hidden" name="action" value="logout" />
         <input type="hidden" name="return_to" value="%s" />
-        <button type="submit">log out</button>
+        <button type="submit" class="btn">log out</button>
       </form>''' % (openid_loc, self.display_name(), return_to)
     else:
       return '''
@@ -111,7 +111,7 @@ class OpenIDWrapper(object):
             value="https://www.google.com/accounts/o8/id"/>
         <input type="hidden" name="return_to" value="%(return_to)s" />
         <dl><dt>You can either:</dt><dd>
-        <button type="submit">log in with Google</button>
+        <button type="submit" class="btn">log in with Google</button>
         </dd></dl>
       </form>
       <form method="post" action="%(action)s">
@@ -121,7 +121,7 @@ class OpenIDWrapper(object):
           style="background: url(http://openid.net/login-bg.gif) no-repeat;
           padding-left: 18px; background-position: 0 50%%;" />
         <input type="hidden" name="return_to" value="%(return_to)s" />
-        <button type="submit">log in</button>
+        <button type="submit" class="btn">log in</button>
         </dd></dl>
       </form>''' % {"action": openid_loc, "return_to": return_to}
 

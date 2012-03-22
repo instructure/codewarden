@@ -338,6 +338,8 @@ def webapp(skip_language_checks=False):
           mime_type = "text/css"
         elif path[-3:] == ".js":
           mime_type = "text/javascript"
+        elif path[-4:] == ".png":
+          mime_type = "image/png"
 
         static_files_cache[path] = {"mime": mime_type,
                             "content": file("themes/%s/static/%s" %

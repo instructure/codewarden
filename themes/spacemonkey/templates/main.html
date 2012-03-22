@@ -1,0 +1,74 @@
+$def with (test_count, completed_count, user, body, current_tab, super_user, title)
+<!doctype html>
+<html lang="en">
+<head>
+    <title>$(title)</title>
+    <link href="/theme/bootstrap.css" rel="stylesheet" />
+    <link href="/theme/common.css" rel="stylesheet" />
+    <script type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
+    </script>
+    <script type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js">
+    </script>
+</head>
+
+<body>
+
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="/">$(title)</a>
+        $if user:
+          <form class="navbar-form pull-right" method="post"
+              action="/openid">
+            <input type="hidden" name="action" value="logout" />
+            <input type="hidden" name="return_to" value="/" />
+            <button class="btn btn-inverse" type="submit">Logout</button>
+          </form>
+          <p class="navbar-text pull-right">
+            Your current score is
+            <span class="score">$(completed_count)/$(test_count)</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    $if user:
+      <div class="row-fluid">
+        <div class="span2">
+          $def nav_link(path, name):
+            <li$:(current_tab == path and ' class="active"' or '')>\
+            <a href="$path">$name</a></li>
+
+          <div class="tabbable tabs-left">
+          <ul class="nav nav-tabs"> <!-- nav-stacked"> -->
+            $:nav_link("/", "Home")
+            $:nav_link("/problems", "Problems (%d/%d)" % (completed_count, test_count))
+            $:nav_link("/settings", "Settings")
+            $:nav_link("/help", "Help")
+            $if super_user:
+              $:nav_link("/problems/new", "New Problem")
+              $:nav_link("/users", "Users")
+          </ul></div>
+        </div>
+        <div class="span8">
+          $:body
+        </div>
+      </div>
+    $else:
+      <div class="row-fluid">
+        <div class="span1">&nbsp;</div>
+        <div class="span3">
+          <img src="/theme/SMLaunchLogo.png"/>
+        </div>
+        <div class="span1">&nbsp;</div>
+        <div class="span5" style="padding-top: 100px;">
+          $:body
+        </div>
+      </div>
+  </div>
+
+</body>
+</html>
+

@@ -11,7 +11,7 @@ $$(document).ready(function() {
         '<td><input type="file" name="stdin_' + test_case_id + '"/></td>' +
         '<td><input type="file" name="stdout_' + test_case_id + '"/></td>' +
         '<td><input type="text" name="timelimit_' + test_case_id +
-            '" size=4 /></td>' +
+            '" size=4 class="input-medium"/></td>' +
         (added_one ?
         '<td><a href="#" id="del_test_case_' + test_case_id + '">x</a></td>' :
         '<td></td>') +
@@ -30,12 +30,14 @@ $$(document).ready(function() {
 <form method="post" enctype="multipart/form-data">
 <dl>
 <dt>Name:</dt>
-  <dd><input type="text" name="name"/></dd>
+  <dd><input type="text" name="name" class="input-xxlarge"/></dd>
 <dt>Description:</dt>
-  <dd><textarea rows=10 cols=50 name="description"></textarea></dd>
+  <dd><textarea rows=10 cols=50 name="description" class="input-xxlarge"
+      ></textarea></dd>
 </dl>
 <table><tr><th>STDIN</th><th>STDOUT</th>
 <th>Time limit (optional, in seconds)</th><td></td></tr>
 <tr><td><a href="#" id="new_test_case">Add a new test case</a></td>
-<td align="right" colspan=2><input type="submit"/></td></tr>
+<td align="right" colspan=2><button type="submit" class="btn">Submit</button>
+</td></tr>
 </form>

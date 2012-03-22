@@ -1,13 +1,25 @@
 $def with (problems, test_case_counts, completed_case_counts, super_user)
 
+<script type="text/javascript">
+  function get_form(element) {
+    while (element) {
+      element = element.parentNode;
+      if (element.tagName.toLowerCase() == "form") {
+        return element;
+      }
+    }
+    return 0;
+  }
+</script>
+
 <h1>Problems</h1>
 <ul>
 $for problem in problems:
-  <li style="height: 1.5em;">
+  <li>
   $if super_user:
     <form method="post" action="/problems/delete/$problem.hash"
-        style="display:inline; float:right; height: 1em;">
-      <input type="submit" value="delete"/>
+        style="display:inline; float:right; clear: both; padding: 0; margin: 0;">
+      <a href="#" onclick="get_form(this).submit(); return false;">delete</a>
     </form>
   <a href="/problems/show/$problem.hash">$problem.name</a>
   (You've completed $(completed_case_counts[problem.id])/$(test_case_counts[problem.id]))</li>
