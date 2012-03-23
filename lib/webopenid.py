@@ -21,10 +21,10 @@ from openid.extensions import ax, sreg
 
 class OpenIDWrapper(object):
 
-  def __init__(self, db, database_config):
-    self.database_config = database_config
-    self.secret = None
+  def __init__(self, db, database_config, secret):
     self.db = db
+    self.database_config = database_config
+    self.secret = secret
 
   def _get_openid_store(self):
     if self.database_config["dbn"] == "postgres":
@@ -34,10 +34,6 @@ class OpenIDWrapper(object):
     raise Exception, "unsupported database adapter"
 
   def _random_data(self): return os.urandom(20)
-
-  def _secret(self):
-    if self.secret is None: self.secret = file('.openid_secret_key').read()
-    return self.secret
 
   def _new_session(self, initial_data):
     hash = None
@@ -76,7 +72,7 @@ class OpenIDWrapper(object):
     self.db.delete("session_data", where="hash=$hash", vars={"hash": hash})
 
   def _hmac(self, thing):
-    return hmac.new(self._secret(), thing).hexdigest()
+    return hmac.new(self.secret, thing).hexdigest()
 
   def _get_field_from_cookies(self, field):
     oid_hash = web.cookies().get('openid_%s' % field, '').split(',', 1)

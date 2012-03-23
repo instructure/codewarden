@@ -27,10 +27,11 @@ __copyright__ = "Copyright 2011 Instructure, Inc."
 __license__ = "AGPLv3"
 __email__ = "jt@instructure.com"
 
+ROOT_DIR = os.path.realpath(os.path.dirname(__file__))
 ANNOUNCEMENT_LIMIT = 1
 ANNOUNCEMENT_EXPIRY = 30
 STATIC_FILE_EXPIRY = 900
-CONFIG_PATH = "server.conf"
+CONFIG_PATH = os.path.join(ROOT_DIR, "server.conf")
 config = ConfigParser.SafeConfigParser()
 config.readfp(file(CONFIG_PATH))
 
@@ -43,16 +44,17 @@ web.config.debug = False
 static_files_cache = {}
 announcements_cache = {"expiration": 0}
 
-def webapp(skip_language_checks=False):
+def webapp():
   sj_client = StraitJacketClient(config.get("straitjacket", "base_url"))
-  render = web.template.render("templates/")
+  render = web.template.render(os.path.join(ROOT_DIR, "templates/"))
 
   database_config = dict(config.items("database"))
   general_config = dict(config.items("general"))
   db = web.database(**database_config)
-  oid = OpenIDWrapper(db, database_config)
-  theme = web.template.render("themes/%s/templates/" %
-      general_config.get("theme", "default"))
+  oid = OpenIDWrapper(db, database_config, file(os.path.join(ROOT_DIR,
+      '.openid_secret_key')).read())
+  theme = web.template.render(os.path.join(ROOT_DIR, "themes/%s/templates/" %
+      general_config.get("theme", "default")))
 
   def get_test_counts(problem_id, user_id):
     completed_cases = db.query("select max(tests_passed) as max from "
@@ -342,9 +344,10 @@ def webapp(skip_language_checks=False):
           mime_type = "image/png"
 
         static_files_cache[path] = {"mime": mime_type,
-                            "content": file("themes/%s/static/%s" %
-                            (general_config.get("theme", "default"), path)
-                            ).read(), "expiration": now + STATIC_FILE_EXPIRY}
+                            "content": file(os.path.join(ROOT_DIR,
+                              "themes/%s/static/%s" % (general_config.get(
+                              "theme", "default"), path))).read(),
+                            "expiration": now + STATIC_FILE_EXPIRY}
 
       web.header('Content-Type', static_files_cache[path]["mime"])
       return static_files_cache[path]["content"]
