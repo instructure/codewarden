@@ -29,6 +29,7 @@ $def with (test_count, completed_count, user, body, current_tab, super_user, tit
           $:sidebar_link("/", "Home")
           $:sidebar_link("/problems", "Problems (%d/%d)" % (completed_count, test_count))
           $:sidebar_link("/settings", "Settings")
+          $:sidebar_link("/troubleshoot", "Troubleshooting")
           $:sidebar_link("/help", "Help")
           $if super_user:
             $:sidebar_link("/announcements", "Announcements")

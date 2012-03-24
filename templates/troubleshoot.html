@@ -1,0 +1,43 @@
+$def with (languages, stdout, stderr, exitstatus, runtime, error)
+<h1>Troubleshooting</h1>
+
+<p>If you're having trouble getting your program to pass tests, try submitting
+your code and some sample input here to debug the problem.</p>
+
+$if runtime is not None:
+  <div class="alert alert-info">
+    <dl>
+      $if stdout:
+        <dt>STDOUT</dt>
+        <dd><pre>$(stdout)</pre></dd>
+      $if stderr:
+        <dt>STDERR</dt>
+        <dd><pre>$(stderr)</pre></dd>
+      $if exitstatus != 0:
+        <dt>Exit Status</dt>
+        <dd><pre>$(exitstatus)</pre></dd>
+      <dt>Runtime</dt>
+      <dd><pre>$("%0.2f" % runtime) seconds</pre></dd>
+      $if error:
+        <dt>Error</dt>
+        <dd><pre>$(error)</pre></dd>
+    </dl>
+  </div>
+
+<form method="post" enctype="multipart/form-data" class="well">
+  <dl>
+    <dt>Your program</dt>
+    <dd>
+      <select name="language">
+      <option value="">[ Please select ]</option>
+      $for language in languages:
+        <option value="$language[0]">$language[1]["visible_name"]</option>
+      </select>
+      <input type="file" name="source"/></dd>
+    <dt>Test input (STDIN)</dt>
+    <dd><p>Feel free to copy and paste example input into this box.</p>
+        <textarea rows=10 cols=50 name="stdin" class="input-xlarge"
+        ></textarea></dd>
+  </dl>
+  <button type="submit" class="btn">Submit</button>
+</form>

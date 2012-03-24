@@ -166,6 +166,22 @@ def webapp():
       return self.wrapper(render.help(languages, general_config.get(
           "contact_email", "unconfigured_contact_email")))
 
+  class Troubleshoot(BaseHandler):
+    def GET(self, stdout=None, stderr=None, exitstatus=None, runtime=None,
+        error=None):
+      enabled_languages = sj_client.enabled_languages()
+      languages = [[lang, enabled_languages[lang]]
+          for lang in sorted(enabled_languages)]
+      return self.wrapper(render.troubleshoot(languages, stdout, stderr,
+          exitstatus, runtime, error))
+    def POST(self):
+      f = web.input()
+      try: f.source.decode('utf8')
+      except: raise web.notacceptable('please submit code encoded in utf8')
+      stdout, stderr, exitstatus, runtime, error = sj_client.run(f.language,
+          f.source, f.stdin)
+      return self.GET(stdout, stderr, exitstatus, runtime, error)
+
   class Problems(BaseHandler):
     def GET(self):
       self.get_user()
@@ -359,6 +375,7 @@ def webapp():
       '/announcements(|.json)', 'Announcements',
       '/settings', 'Settings',
       '/help', 'Help',
+      '/troubleshoot', 'Troubleshoot',
       '/problems', 'Problems',
       '/problems/new', 'NewProblem',
       '/problems/delete/([a-f0-9]+)', 'DeleteProblem',
