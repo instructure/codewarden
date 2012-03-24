@@ -23,10 +23,12 @@ $def with (languages, contact_email)
 </p>
 
 <p>The supported language versions are:</p>
+<div class="well">
 <ul>
 $for language in languages:
   <li>$language["visible_name"] - $language["version"]</li>
 </ul>
+</div>
 
 <p>Specific language notes:</p>
 <ul>

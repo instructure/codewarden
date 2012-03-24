@@ -4,16 +4,18 @@ $if user:
   <h1>Settings</h1>
   $:login_form
 
-  <p>Be sure to keep the following contact information up to date.</p>
-  <form method="post">
-    <dl>
-      <dt>Your name:</dt>
-        <dd><input type="text" name="name" value="$user.name"/></dd>
-      <dt>Your email:</dt>
-        <dd><input type="text" name="email" value="$user.email"/></dd>
-    </dl>
-    <button type="submit" class="btn">Set</button>
-  </form>
+  <div class="well">
+    <p>Be sure to keep the following contact information up to date.</p>
+    <form method="post">
+      <dl>
+        <dt>Your name:</dt>
+          <dd><input type="text" name="name" value="$user.name"/></dd>
+        <dt>Your email:</dt>
+          <dd><input type="text" name="email" value="$user.email"/></dd>
+      </dl>
+      <button type="submit" class="btn">Set</button>
+    </form>
+  </div>
 
 $else:
   <h1>Login</h1>
